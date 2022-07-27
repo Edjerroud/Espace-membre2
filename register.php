@@ -1,26 +1,39 @@
-<?php require 'inc/header.php';
-    
-?>
+<?php require_once 'inc/functions.php'; ?>
 
 <?php  
+
+// Vérification si les données ont été posté //
 if(!empty($_POST)) {
 
     $errors = array() ;
     require_once 'inc/db.php';
+
+ 
+// Vérification du nom d'utilisateur //
 
     if(empty($_POST['username']) || !preg_match('/^[a-zA-Z0-9_]+$/', $_POST['username'])){
         $errors['username'] = "Votre pseudo n'est pas valide (alphanumerique)";
 
     }else{
 
+// Requete préparé //
+
         $req = $pdo->prepare('SELECT id FROM users WHERE username = ?');
+
+// Execution de la requete //
+
         $req->execute([$_POST['username']]);
+
+// Récuperation des informations //
+
         $user = $req->fetch();
         
         if($user){
             $errors['username'] = 'Ce pseudo est déja pris';
         }
     }
+
+// Vérification de l'email //
 
     if(empty($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
         $errors['email'] = "Votre email n'est pas valide ";
@@ -35,6 +48,8 @@ if(!empty($_POST)) {
             $errors['email'] = 'Cet email est déja utilisé pour un autre compte';
         }
     }
+
+// Vérification du mot de passe et de la confirmation du mot de passe //
 
     if(empty($_POST['password']) || $_POST['password'] != $_POST['password_confirm']){
         $errors['password'] = "Vous devez rentrer un mot de passe valide";
@@ -81,6 +96,7 @@ if(!empty($_POST)) {
 </div>
 <?php endif; ?>
 
+<!--------------------------------- FORMULAIRE ------------------------------------------------------->
 
 <form action="" method="POST">
 
