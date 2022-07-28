@@ -1,4 +1,5 @@
 <?php require_once 'inc/functions.php'; ?>
+<?php require_once 'inc/header.php'; ?>
 
 <?php  
 
@@ -62,12 +63,12 @@ if(!empty($_POST)) {
         $req = $pdo->prepare("INSERT INTO users SET `username` = ?, `email` = ?, `password` = ?, `confirmation_token` = ?");
         $password = password_hash($_POST['password'],PASSWORD_BCRYPT);
         $token = str_random(60);
-        debug($token);
-        die();
+        // debug($token);
+        // die();
         $req->execute([$_POST['username'], $_POST['email'], $password, $token]);
         $user_id = $pdo->lastInsertId();
-        main($_POST['email'], 'confirmmation de votre compte', "Afin de valider votre compte merci de cliquer sur ce lien\n\nhttp://localhost/Espace-membre-php-2/confirm.php?id=$user_id &token=$token");
-        heder('location: login.php');
+        mail($_POST['email'], 'confirmmation de votre compte', "Afin de valider votre compte merci de cliquer sur ce lien\n\nhttp://localhost/Espace-membre-php-2/confirm.php?id=$user_id &token=$token");
+        header('location: login.php');
         exit();
         
         
