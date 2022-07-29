@@ -74,6 +74,9 @@ if(!empty($_POST)) {
         
         
     }
+
+// Fonction debug //
+
     debug($errors);
 }
 
