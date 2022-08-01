@@ -11,7 +11,7 @@ require 'inc/db.php' ;
 
 // Requete préparer //
 
-$req = $pdo->prepare('SELECT confirmation_token FROM users WHERE id = ?');
+$req = $pdo->prepare('SELECT * FROM users WHERE id = ?');
 
 // Execution de la requete //
 

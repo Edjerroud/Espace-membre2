@@ -5,6 +5,7 @@ function debug($variable) {
     echo '<pre>' . print_r($variable, true) . '</pre>';
 }
 
+// Fonction pour générer une chaine de caractéres d'une certaine taille //
 function str_random($length){
 
     $alphabet = "0123456789azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN";

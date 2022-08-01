@@ -1,5 +1,7 @@
-<?php require_once 'inc/functions.php'; ?>
-<?php require_once 'inc/header.php'; ?>
+<?php
+require_once 'inc/functions.php'; 
+session_start();
+     require_once 'inc/header.php'; ?>
 
 <?php  
 
@@ -17,7 +19,7 @@ if(!empty($_POST)) {
 
     }else{
 
-// Requete préparé //
+// Requete préparé pour éviter les doublons dans la base de donnée //
 
         $req = $pdo->prepare('SELECT id FROM users WHERE username = ?');
 
@@ -56,9 +58,10 @@ if(!empty($_POST)) {
         $errors['password'] = "Vous devez rentrer un mot de passe valide";
     }
     
+// Requete pour inscrire l'utilisateur //
+
     if(empty($errors)){
 
-        
         
         $req = $pdo->prepare("INSERT INTO users SET `username` = ?, `email` = ?, `password` = ?, `confirmation_token` = ?");
         $password = password_hash($_POST['password'],PASSWORD_BCRYPT);
@@ -68,12 +71,14 @@ if(!empty($_POST)) {
         $req->execute([$_POST['username'], $_POST['email'], $password, $token]);
         $user_id = $pdo->lastInsertId();
         mail($_POST['email'], 'confirmmation de votre compte', "Afin de valider votre compte merci de cliquer sur ce lien\n\nhttp://localhost/Espace-membre-php-2/confirm.php?id=$user_id &token=$token");
+        $_SESSION['flash']['success'] = 'Un email de confirmation vous a été envoyé pour valider votre compte';
         header('location: login.php');
         exit();
         
         
         
     }
+
 
 // Fonction debug //
 
