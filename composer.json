@@ -1,0 +1,6 @@
+{
+    "require": {
+        "symfony/mailer": "^5.4",
+        "symfony/mime": "^5.4"
+    }
+}

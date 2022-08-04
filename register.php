@@ -1,9 +1,14 @@
 <?php
+require __DIR__ . '/vendor/autoload.php';
 require_once 'inc/functions.php'; 
 session_start();
-     require_once 'inc/header.php'; ?>
+require_once 'inc/header.php'; 
 
-<?php  
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+
+
 
 // Vérification si les données ont été posté //
 if(!empty($_POST)) {
@@ -70,11 +75,27 @@ if(!empty($_POST)) {
         // die();
         $req->execute([$_POST['username'], $_POST['email'], $password, $token]);
         $user_id = $pdo->lastInsertId();
-        mail($_POST['email'], 'confirmmation de votre compte', "Afin de valider votre compte merci de cliquer sur ce lien\n\nhttp://localhost/Espace-membre-php-2/confirm.php?id=$user_id &token=$token");
-        $_SESSION['flash']['success'] = 'Un email de confirmation vous a été envoyé pour valider votre compte';
-        header('location: login.php');
-        exit();
         
+        
+        $transport = Transport::fromDsn('smtp://localhost:1025');
+        $mailer = new Mailer($transport); 
+
+        $email = (new Email())
+            ->from('expediteur@example.test')
+            ->to('destinataire@here.test')
+            ->priority(Email::PRIORITY_HIGHEST)
+            ->subject('confirmmation de votre compte')
+            ->html("Afin de valider votre compte merci de cliquer sur ce lien\n\n<a href=\"http://localhost/Espace-membre-php-2/confirm.php?id=$user_id &token=$token\">Confirmer mon compte</a>");
+            // ->html('<strong>This is an important message!</strong>');
+
+            $mailer->send($email);
+
+            $_SESSION['flash']['success'] = 'Un email de confirmation vous a été envoyé pour valider votre compte';
+                header('location: login.php');
+                 exit();
+
+
+
         
         
     }
