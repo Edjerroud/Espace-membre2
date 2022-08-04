@@ -1,9 +1,17 @@
 <?php
+// Inclusion des bibliothéque symfony //
 require __DIR__ . '/vendor/autoload.php';
-require_once 'inc/functions.php'; 
-session_start();
-require_once 'inc/header.php'; 
 
+// Inclusion des fonctions //
+require_once 'inc/functions.php'; 
+
+
+// Démarrage de la session //
+session_start();
+
+
+ 
+// Création du transporter et du mailer //
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
@@ -80,16 +88,18 @@ if(!empty($_POST)) {
         $transport = Transport::fromDsn('smtp://localhost:1025');
         $mailer = new Mailer($transport); 
 
+        // Création de l’email //
         $email = (new Email())
             ->from('expediteur@example.test')
             ->to('destinataire@here.test')
             ->priority(Email::PRIORITY_HIGHEST)
             ->subject('confirmmation de votre compte')
             ->html("Afin de valider votre compte merci de cliquer sur ce lien\n\n<a href=\"http://localhost/Espace-membre-php-2/confirm.php?id=$user_id &token=$token\">Confirmer mon compte</a>");
-            // ->html('<strong>This is an important message!</strong>');
-
+            
+            // Envoie du message avec la méthode send() du mailer : //
             $mailer->send($email);
-
+ 
+            // Ajout d'un message flash et redirection vers la page de connexion //
             $_SESSION['flash']['success'] = 'Un email de confirmation vous a été envoyé pour valider votre compte';
                 header('location: login.php');
                  exit();
@@ -106,7 +116,11 @@ if(!empty($_POST)) {
     debug($errors);
 }
 
+// Inclusion du header //
+require_once 'inc/header.php';
+
 ?>
+
 
 
 
@@ -153,4 +167,6 @@ if(!empty($_POST)) {
     <button type="submit" class="btn btn-primary">M'inscrire</button>
 
 </form>
+
+<!-- Inclusion du footer  -->
 <?php require 'inc/footer.php'; ?>

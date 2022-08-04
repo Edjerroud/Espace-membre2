@@ -3,7 +3,7 @@
 // Récuperation des parametres //
 
 $user_id = $_GET['id'];
-$token = $_get['token'];
+$token = $_GET['token'];
 
 // Connexion à la base de données //
 
@@ -20,7 +20,7 @@ $req->execute([$user_id]);
 // Récuperation des informations //
 
 $user = $req->fetch();
-session_star();
+session_start();
 
 // Vérification si l'utilisateur correspond et si le token correspond //
 
