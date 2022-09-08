@@ -1,6 +1,6 @@
 <?php
 
-// Connection à la base de données via la créagtion d'un objet PDO //
+// Connection à la base de données via la création d'un objet PDO //
 
 $pdo = new PDO('mysql:dbname=espace-membre-2;host=localhost','root','');
 
